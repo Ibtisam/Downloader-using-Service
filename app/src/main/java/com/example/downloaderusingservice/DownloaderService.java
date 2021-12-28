@@ -31,7 +31,6 @@ import java.net.URL;
 
 public class DownloaderService extends Service {
 
-    private Looper serviceLooper;
     private ServiceHandler serviceHandler;
     private static final String CHANNEL_ID = "NOTIF_C_1";
     private int notif_A_Id;
@@ -49,10 +48,10 @@ public class DownloaderService extends Service {
         public void handleMessage(Message msg) {
             // Normally we would do some work here, like download a file.
             URL url_dwl = (URL) msg.obj;
-            String reply = "";
+            String reply;
 
-            int fileLength = 0;
-            long total = 0;
+            int fileLength;
+            long total;
 
             InputStream input = null;
             OutputStream output = null;
@@ -85,7 +84,7 @@ public class DownloaderService extends Service {
 
                 // download the file
                 input = connection.getInputStream();
-                String path = "";
+                String path;
                 //checking is an external storage is available
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
                     //getting the path of external downloads directory
@@ -94,7 +93,7 @@ public class DownloaderService extends Service {
                     filePath = path + "/" + f_name;
                     output = new FileOutputStream(filePath);
 
-                    byte data[] = new byte[4096];
+                    byte[] data = new byte[4096];
                     total = 0;
                     int count;
                     //reading the file from internet and writing it to the path
@@ -194,7 +193,7 @@ public class DownloaderService extends Service {
         thread.start();
 
         // Get the HandlerThread's Looper and use it for our Handler
-        serviceLooper = thread.getLooper();
+        Looper serviceLooper = thread.getLooper();
         serviceHandler = new ServiceHandler(serviceLooper);
     }
 
